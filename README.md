@@ -1,8 +1,8 @@
-# 🎬 CineLens - Movie Identifier Agent
+# 🎬 MovieLens - Movie Identifier Agent
 
-**CineLens** is an intelligent AI agent that identifies movies from screenshots and finds you the best places to watch them. Built with **Google Gemini 1.5 Flash** for vision analysis and **Tavily API** for real-time search.
+**MovieLens** is an intelligent AI agent that identifies movies from screenshots and finds you the best places to watch them. Built with **Google Gemini 1.5 Flash** for vision analysis and **Tavily API** for real-time search.
 
-![CineLens Demo](https://placehold.co/600x400/101010/6366f1?text=CineLens+Preview)
+![MovieLens Demo](https://placehold.co/600x400/101010/6366f1?text=MovieLens+Preview)
 
 ## ✨ Features
 
