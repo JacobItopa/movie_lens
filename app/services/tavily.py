@@ -24,17 +24,33 @@ class TavilyService:
                 query=query,
                 search_depth="basic",
                 include_domains=["netflix.com", "hulu.com", "amazon.com", "disneyplus.com", "hbo.com", "apple.com", "primevideo.com", "peacocktv.com"],
-                max_results=5
+                max_results=10
             )
             
             results = []
+            seen_domains = set()
+
             if 'results' in response:
                 for res in response['results']:
-                    results.append({
-                        "title": res.get('title'),
-                        "url": res.get('url'),
-                        "content": res.get('content')
-                    })
+                    url = res.get('url', '')
+                    title = res.get('title', '')
+                    
+                    # Basic domain extraction for deduplication
+                    try:
+                        from urllib.parse import urlparse
+                        domain = urlparse(url).netloc.replace('www.', '')
+                        base_domain = '.'.join(domain.split('.')[-2:]) # e.g., netflix.com
+                    except:
+                        base_domain = url
+
+                    if base_domain not in seen_domains:
+                        results.append({
+                            "title": title,
+                            "url": url,
+                            "content": res.get('content')
+                        })
+                        seen_domains.add(base_domain)
+            
             return results
 
         except Exception as e:
