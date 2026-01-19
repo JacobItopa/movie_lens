@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineLens | AI Movie Identifier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="background-glow"></div>
+
+    <main class="container">
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-film"></i> CineLens
+            </div>
+            <p class="subtitle">Upload a screenshot. Discover the movie. Watch it now.</p>
+        </header>
+
+        <section class="upload-section" id="upload-section">
+            <div class="drop-zone" id="drop-zone">
+                <div class="icon-container">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+                <h3>Drag & Drop or Click to Upload</h3>
+                <p>Supports JPG, PNG, WEBP</p>
+                <input type="file" id="file-input" accept="image/*" hidden>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <section class="loading-section hidden" id="loading-section">
+            <div class="loader">
+                <div class="film-reel"></div>
+            </div>
+            <h3 id="loading-text">Analyzing Scene...</h3>
+        </section>
+
+        <!-- Results State -->
+        <section class="result-section hidden" id="result-section">
+            <div class="movie-card">
+                <div class="movie-header">
+                    <div class="confidence-badge" id="confidence-badge">
+                        <i class="fa-solid fa-check-circle"></i> 98% Match
+                    </div>
+                    <button class="close-btn" id="close-btn"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="movie-content">
+                    <h1 id="movie-title">Inception</h1>
+                    <div class="movie-meta">
+                        <span id="movie-year">2010</span> • <span class="tag">Movie</span>
+                    </div>
+                    <p class="movie-summary" id="movie-summary">
+                        A thief who steals corporate secrets through the use of dream-sharing technology is given the
+                        inverse task of planting an idea into the mind of a C.E.O.
+                    </p>
+
+                    <div class="streaming-links">
+                        <h3><i class="fa-solid fa-play-circle"></i> Watch Now</h3>
+                        <div class="links-grid" id="links-grid">
+                            <!-- Links injected here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Error State -->
+        <section class="error-section hidden" id="error-section">
+            <div class="error-card">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <h3 id="error-title">Oops!</h3>
+                <p id="error-message">Something went wrong.</p>
+                <button class="retry-btn" id="retry-btn">Try Again</button>
+            </div>
+        </section>
+
+
+    </main>
+
+    <footer class="tip-footer">
+        <p><i class="fa-solid fa-lightbulb"></i> Tip: For best results, upload a clear, high-quality screenshot of a
+            distinct scene.</p>
+    </footer>
+
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
