@@ -14,7 +14,7 @@
 ## 🛠️ Tech Stack
 
 - **Backend**: Python (FastAPI)
-- **AI Model**: Google Gemini 1.5 Flash
+- **AI Model**: Google Gemini 2.5 Flash
 - **Search**: Tavily Search API
 - **Frontend**: Vanilla HTML/CSS/JS (No complex build steps!)
 
