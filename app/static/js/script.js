@@ -33,8 +33,11 @@ fileInput.addEventListener('change', (e) => {
 });
 
 // Main Logic
-async function handleFiles(files) {
-    if (files.length === 0) return;
+async function handleFile(file) {
+    if (!file.type.startsWith('image/')) {
+        showError("Please upload a valid image file.");
+        return;
+    }
 
     // UI State -> Loading
     uploadSection.classList.add('hidden');
@@ -43,19 +46,12 @@ async function handleFiles(files) {
     loadingSection.classList.remove('hidden');
 
     // Simulate steps text
-    const fileCount = files.length;
-    loadingText.textContent = `Analyzing ${fileCount} screenshot${fileCount > 1 ? 's' : ''}...`;
-
-    setTimeout(() => { if (!loadingSection.classList.contains('hidden')) loadingText.textContent = "Connecting the dots..." }, 1500);
-    setTimeout(() => { if (!loadingSection.classList.contains('hidden')) loadingText.textContent = "Searching for streaming links..." }, 3500);
+    loadingText.textContent = "Analyzing Scene...";
+    setTimeout(() => { if (!loadingSection.classList.contains('hidden')) loadingText.textContent = "Querying Gemini Vision..." }, 800);
+    setTimeout(() => { if (!loadingSection.classList.contains('hidden')) loadingText.textContent = "Searching for streaming links..." }, 2500);
 
     const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-        if (files[i].type.startsWith('image/')) {
-            // Use 'images' key and include filename
-            formData.append('images', files[i], files[i].name);
-        }
-    }
+    formData.append('file', file);
 
     try {
         const response = await fetch('/api/identify', {
@@ -66,13 +62,13 @@ async function handleFiles(files) {
         const result = await response.json();
 
         if (!response.ok) {
-            throw new Error(result.detail || "Failed to process images");
+            throw new Error(result.detail || "Failed to process image");
         }
 
         if (result.success) {
             showResult(result.data);
         } else {
-            showError("We couldn't identify a movie. Try clearer screenshots!");
+            showError("We couldn't identify a movie in that image. Try a clearer shot!");
         }
 
     } catch (error) {
