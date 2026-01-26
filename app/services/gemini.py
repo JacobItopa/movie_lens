@@ -22,21 +22,23 @@ class GeminiService:
         confidence: float
         is_movie: bool
 
-    async def identify_movie(self, images: list[dict]) -> dict:
+    async def identify_movie(self, image_data: bytes, mime_type: str = "image/jpeg") -> dict:
         try:
-            # Create a list of Part objects
-            parts = []
-            
+            # Create a Part object consistent with what Gemini expects
+            image_part = {
+                "mime_type": mime_type,
+                "data": image_data
+            }
+
             prompt = """
-            Analyze these images and determine if they are screenshots from the same movie or TV show.
-            They are likely different scenes or frames from a single title.
-            
+            Analyze this image and determine if it is a screenshot from a movie or TV show.
+            If it is:
             1. Identify the Movie/Show Title.
             2. Estimate the Release Year.
-            3. Provide a brief 1-sentence plot summary.
+            3. Provide a brief 1-sentence plot summary relevant to the scene if possible, or the movie in general.
             4. Give a confidence score (0.0 to 1.0).
 
-            If they are NOT from a movie/show (e.g., desktop screenshots, personal photos), set 'is_movie' to false.
+            If it is NOT a movie/show (e.g., a desktop screenshot, personal photo, random object), set 'is_movie' to false.
 
             Return the result as a raw JSON object with the following structure:
             {
@@ -47,16 +49,9 @@ class GeminiService:
                 "is_movie": true
             }
             """
-            parts.append(prompt)
-
-            for img in images:
-                parts.append({
-                    "mime_type": img["mime_type"],
-                    "data": img["data"]
-                })
 
             response = self.model.generate_content(
-                parts,
+                [prompt, image_part],
                 generation_config={"response_mime_type": "application/json"}
             )
             

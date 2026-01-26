@@ -22,13 +22,13 @@ dropZone.addEventListener('drop', (e) => {
     e.preventDefault();
     dropZone.classList.remove('dragover');
     if (e.dataTransfer.files.length) {
-        handleFiles(e.dataTransfer.files);
+        handleFile(e.dataTransfer.files[0]);
     }
 });
 
 fileInput.addEventListener('change', (e) => {
     if (e.target.files.length) {
-        handleFiles(e.target.files);
+        handleFile(e.target.files[0]);
     }
 });
 

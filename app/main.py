@@ -21,28 +21,16 @@ from typing import List
 
 # API Routes
 @app.post("/api/identify")
-async def identify_movie(images: List[UploadFile] = File(...)):
-    if not images:
-         raise HTTPException(status_code=400, detail="No images uploaded")
+async def identify_movie(file: UploadFile = File(...)):
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="File must be an image")
 
     try:
-        # Prepare images for Gemini
-        images_payload = []
-        for file in images:
-            if not file.content_type.startswith("image/"):
-                continue # Skip non-images
-            
-            content = await file.read()
-            images_payload.append({
-                "data": content,
-                "mime_type": file.content_type
-            })
-
-        if not images_payload:
-            raise HTTPException(status_code=400, detail="No valid images found")
+        # Read file content
+        contents = await file.read()
         
         # 1. Identify with Gemini
-        movie_info = await gemini_service.identify_movie(images_payload)
+        movie_info = await gemini_service.identify_movie(contents, file.content_type)
         
         if not movie_info.get("is_movie"):
             return {
