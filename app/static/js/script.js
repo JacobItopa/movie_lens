@@ -52,7 +52,8 @@ async function handleFiles(files) {
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
         if (files[i].type.startsWith('image/')) {
-            formData.append('files', files[i]);
+            // Use 'images' key and include filename
+            formData.append('images', files[i], files[i].name);
         }
     }
 
