@@ -22,22 +22,19 @@ dropZone.addEventListener('drop', (e) => {
     e.preventDefault();
     dropZone.classList.remove('dragover');
     if (e.dataTransfer.files.length) {
-        handleFile(e.dataTransfer.files[0]);
+        handleFiles(e.dataTransfer.files);
     }
 });
 
 fileInput.addEventListener('change', (e) => {
     if (e.target.files.length) {
-        handleFile(e.target.files[0]);
+        handleFiles(e.target.files);
     }
 });
 
 // Main Logic
-async function handleFile(file) {
-    if (!file.type.startsWith('image/')) {
-        showError("Please upload a valid image file.");
-        return;
-    }
+async function handleFiles(files) {
+    if (files.length === 0) return;
 
     // UI State -> Loading
     uploadSection.classList.add('hidden');
@@ -46,11 +43,18 @@ async function handleFile(file) {
     loadingSection.classList.remove('hidden');
 
     // Simulate steps text
-    setTimeout(() => { if (!loadingSection.classList.contains('hidden')) loadingText.textContent = "Querying Gemini Vision..." }, 800);
-    setTimeout(() => { if (!loadingSection.classList.contains('hidden')) loadingText.textContent = "Searching for streaming links..." }, 2500);
+    const fileCount = files.length;
+    loadingText.textContent = `Analyzing ${fileCount} screenshot${fileCount > 1 ? 's' : ''}...`;
+
+    setTimeout(() => { if (!loadingSection.classList.contains('hidden')) loadingText.textContent = "Connecting the dots..." }, 1500);
+    setTimeout(() => { if (!loadingSection.classList.contains('hidden')) loadingText.textContent = "Searching for streaming links..." }, 3500);
 
     const formData = new FormData();
-    formData.append('file', file);
+    for (let i = 0; i < files.length; i++) {
+        if (files[i].type.startsWith('image/')) {
+            formData.append('files', files[i]);
+        }
+    }
 
     try {
         const response = await fetch('/api/identify', {
@@ -61,13 +65,13 @@ async function handleFile(file) {
         const result = await response.json();
 
         if (!response.ok) {
-            throw new Error(result.detail || "Failed to process image");
+            throw new Error(result.detail || "Failed to process images");
         }
 
         if (result.success) {
             showResult(result.data);
         } else {
-            showError("We couldn't identify a movie in that image. Try a clearer shot!");
+            showError("We couldn't identify a movie. Try clearer screenshots!");
         }
 
     } catch (error) {
