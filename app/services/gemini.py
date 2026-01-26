@@ -13,7 +13,7 @@ class GeminiService:
             print("Warning: GOOGLE_API_KEY not found in environment variables.")
         else:
             genai.configure(api_key=api_key)
-            self.model = genai.GenerativeModel('gemini-2.5-flash')
+            self.model = genai.GenerativeModel('gemini-1.5-flash')
 
     class MovieInfo(typing_extensions.TypedDict):
         title: str

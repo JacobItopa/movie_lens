@@ -21,7 +21,7 @@ from typing import List
 
 # API Routes
 @app.post("/api/identify")
-async def identify_movie(files: List[UploadFile] = File(...)):
+async def identify_movie(files: List[UploadFile] = File(..., alias="files")):
     if not files:
          raise HTTPException(status_code=400, detail="No files uploaded")
 
